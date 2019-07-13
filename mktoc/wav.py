@@ -341,12 +341,12 @@ class WavOffsetWriter(object):
          self._write_frames(wav_out, data ,bytes_p_samp)
          wav_in.close()
       else:    # insert silence if no previous file
-         self._write_frames(wav_out ,'\x00'*offset_bytes, bytes_p_samp)
+         self._write_frames(wav_out ,b'\x00'*offset_bytes, bytes_p_samp)
       # add original file data to output stream
       wav_in = wave.open( fn )
       samples = wav_in.getnframes() - self._offset
       while samples:
-         data = wav_in.readframes( min(samples,self._COPY_SIZE) )
+         data = wav_in.readframes( int(min(samples,self._COPY_SIZE)) )
          samples -= len(data) / bytes_p_samp
          self._write_frames(wav_out, data, bytes_p_samp)
       wav_in.close()
